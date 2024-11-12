@@ -1,0 +1,87 @@
+public class SortExample {
+
+    public static void main(String[] args) {
+        // Unsorted arrays
+        Integer[] array1 = { 12, 13, 24, 10, 3, 6, 90, 70 };
+        int[] array2 = { 2, 6, 3, 5, 1 };
+
+        // Sort using quicksort
+        quickSort(array1, 0, array1.length - 1);
+        System.out.println("QuickSorted array1: " + Arrays.toString(array1));
+
+        // Sort using mergesort
+        mergeSort(array2, array2.length);
+        System.out.println("MergeSorted array2: " + Arrays.toString(array2));
+    }
+
+    // Quicksort function for Integer arrays
+    public static void quickSort(Integer[] arr, int low, int high) {
+        if (arr == null || arr.length == 0) return;
+        if (low >= high) return;
+
+        // Choose the pivot from the middle
+        int middle = low + (high - low) / 2;
+        int pivot = arr[middle];
+
+        // Partition the array
+        int i = low, j = high;
+        while (i <= j) {
+            while (arr[i] < pivot) i++;
+            while (arr[j] > pivot) j--;
+            if (i <= j) {
+                swap(arr, i, j);
+                i++;
+                j--;
+            }
+        }
+
+        // Recursively apply quicksort on subarrays
+        if (low < j) quickSort(arr, low, j);
+        if (high > i) quickSort(arr, i, high);
+    }
+
+    // Swap function for Integer arrays
+    public static void swap(Integer[] array, int x, int y) {
+        int temp = array[x];
+        array[x] = array[y];
+        array[y] = temp;
+    }
+
+    // Mergesort function for int arrays
+    public static void mergeSort(int[] a, int n) {
+        if (n < 2) return;
+
+        int mid = n / 2;
+        int[] left = new int[mid];
+        int[] right = new int[n - mid];
+
+        System.arraycopy(a, 0, left, 0, mid);
+        System.arraycopy(a, mid, right, 0, n - mid);
+
+        mergeSort(left, mid);
+        mergeSort(right, n - mid);
+        merge(a, left, right, mid, n - mid);
+    }
+
+    // Merge function for mergesort
+    public static void merge(int[] a, int[] left, int[] right, int leftSize, int rightSize) {
+        int i = 0, j = 0, k = 0;
+        while (i < leftSize && j < rightSize) {
+            if (left[i] <= right[j]) {
+                a[k++] = left[i++];
+            } else {
+                a[k++] = right[j++];
+            }
+        }
+        while (i < leftSize) a[k++] = left[i++];
+        while (j < rightSize) a[k++] = right[j++];
+    }
+
+    // Check if an array is sorted (helper function)
+    private static boolean isSorted(int[] x) {
+        for (int i = 0; i < x.length - 1; i++) {
+            if (x[i] > x[i + 1]) return false;
+        }
+        return true;
+    }
+}
